@@ -19,6 +19,7 @@ class Booking(Base):
     email = Column(String, nullable=False)
     phone = Column(String, default="")
     travelers = Column(Integer, default=1)
+    travel_date = Column(String, default="")
     created_at = Column(DateTime, server_default=func.now())
 
 

@@ -19,6 +19,7 @@ async def create_booking(booking: BookingCreate, db: Session = Depends(get_db)):
         email=booking.email,
         phone=booking.phone or "",
         travelers=booking.travelers or 1,
+        travel_date=booking.travel_date or "",
     )
     db.add(db_booking)
     db.commit()

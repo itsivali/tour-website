@@ -18,6 +18,7 @@ class BookingCreate(BaseModel):
     tour_id: int
     phone: Optional[str] = None
     travelers: Optional[int] = 1
+    travel_date: Optional[str] = None
 
 
 class BookingOut(BaseModel):
@@ -27,6 +28,7 @@ class BookingOut(BaseModel):
     tour_id: int
     phone: Optional[str] = None
     travelers: Optional[int] = 1
+    travel_date: Optional[str] = None
 
     model_config = {"from_attributes": True}
 

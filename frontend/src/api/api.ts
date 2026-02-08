@@ -17,6 +17,7 @@ export interface BookingData {
   email: string;
   phone?: string;
   travelers?: number;
+  travel_date?: string;
 }
 
 export interface ContactData {
