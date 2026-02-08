@@ -1,73 +1,117 @@
-# React + TypeScript + Vite
+# TourSphere
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack tour booking website built with React and FastAPI. Browse safari, coastal, and mountain tours across East Africa, book trips, and get in touch.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+| Frontend | Backend |
+|----------|---------|
+| React 19 + TypeScript | Python FastAPI |
+| Vite 7 | SQLAlchemy + SQLite |
+| Tailwind CSS v4 | Pydantic v2 |
+| Framer Motion | Uvicorn |
+| React Router 7 | |
 
-## React Compiler
+## Prerequisites
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Node.js** >= 18
+- **Python** >= 3.10
+- **npm** (comes with Node.js)
+- **pip** (comes with Python)
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 1. Clone the repository
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone https://github.com/thigaruth/tour-website.git
+cd tour-website
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Start the backend
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+cd backend
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Create and activate a virtual environment
+python3 -m venv venv
+source venv/bin/activate        # Linux / macOS
+# venv\Scripts\activate          # Windows
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Start the server
+uvicorn app.main:app --reload
 ```
+
+The API runs at **http://127.0.0.1:8000**. On first startup the database is created automatically and seeded with sample tours.
+
+Interactive API docs are available at **http://127.0.0.1:8000/docs**.
+
+### 3. Start the frontend
+
+Open a **second terminal**:
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start the dev server
+npm run dev
+```
+
+The app runs at **http://localhost:5173**.
+
+> Both the backend and frontend must be running at the same time for the app to work.
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/tours/` | List all tours |
+| GET | `/api/tours/{id}` | Get a single tour |
+| POST | `/api/bookings/` | Create a booking |
+| GET | `/api/bookings/` | List all bookings |
+| POST | `/api/contact/` | Submit a contact message |
+
+## Project Structure
+
+```
+tour-website/
+├── backend/
+│   ├── app/
+│   │   ├── main.py          # FastAPI app, lifespan, CORS
+│   │   ├── database.py      # Engine, session, Base
+│   │   ├── models.py        # SQLAlchemy models
+│   │   ├── schemas.py       # Pydantic schemas
+│   │   ├── routes/
+│   │   │   ├── tours.py     # Tour endpoints
+│   │   │   ├── bookings.py  # Booking endpoints
+│   │   │   └── contact.py   # Contact endpoint
+│   │   └── utils/
+│   │       └── email.py     # Email helper
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── api/api.ts       # Axios client, types, hooks
+│   │   ├── components/      # Navbar, HeroSlider, TourCard, BookingForm, Footer
+│   │   ├── pages/           # Home, Tours, TourDetails, Booking, Contact, About
+│   │   ├── App.tsx          # Router + Toaster
+│   │   └── main.tsx         # Entry point
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.ts
+└── README.md
+```
+
+## Build for Production
+
+```bash
+cd frontend
+npm run build
+```
+
+Output is written to `frontend/dist/`.
