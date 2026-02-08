@@ -1,18 +1,41 @@
+from typing import Optional
 from pydantic import BaseModel, EmailStr
 
-class Tour(BaseModel):
+
+class TourOut(BaseModel):
     id: int
-    title: str
+    name: str
     description: str
     price: float
+    image: str = ""
 
-class Booking(BaseModel):
+    model_config = {"from_attributes": True}
+
+
+class BookingCreate(BaseModel):
     name: str
     email: EmailStr
     tour_id: int
-    travelers: int
+    phone: Optional[str] = None
+    travelers: Optional[int] = 1
+
+
+class BookingOut(BaseModel):
+    id: int
+    name: str
+    email: str
+    tour_id: int
+    phone: Optional[str] = None
+    travelers: Optional[int] = 1
+
+    model_config = {"from_attributes": True}
+
 
 class ContactMessage(BaseModel):
     name: str
     email: EmailStr
+    message: str
+
+
+class MessageResponse(BaseModel):
     message: str

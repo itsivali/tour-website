@@ -1,5 +1,4 @@
-import React from "react";
-// import your pages below...
+import type { ReactNode } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "./components/Navbar";
@@ -19,12 +18,12 @@ export default function AppRoutes() {
       <Navbar />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<PageWrapper><Home/></PageWrapper>} />
-          <Route path="/about" element={<PageWrapper><About/></PageWrapper>} />
-          <Route path="/tours" element={<PageWrapper><Tours/></PageWrapper>} />
-          <Route path="/tours/:id" element={<PageWrapper><TourDetails/></PageWrapper>} />
-          <Route path="/booking" element={<PageWrapper><Booking/></PageWrapper>} />
-          <Route path="/contact" element={<PageWrapper><Contact/></PageWrapper>} />
+          <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+          <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
+          <Route path="/tours" element={<PageWrapper><Tours /></PageWrapper>} />
+          <Route path="/tours/:id" element={<PageWrapper><TourDetails /></PageWrapper>} />
+          <Route path="/booking" element={<PageWrapper><Booking /></PageWrapper>} />
+          <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
         </Routes>
       </AnimatePresence>
       <Footer />
@@ -32,7 +31,7 @@ export default function AppRoutes() {
   );
 }
 
-function PageWrapper({ children }: { children: React.ReactNode }) {
+function PageWrapper({ children }: { children: ReactNode }) {
   return (
     <motion.main
       initial={{ opacity: 0, y: 10 }}

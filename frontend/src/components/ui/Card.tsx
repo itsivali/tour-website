@@ -1,6 +1,12 @@
+import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 
-export default function Card({ children, className = "" }) {
+interface CardProps {
+  children: ReactNode;
+  className?: string;
+}
+
+export default function Card({ children, className = "" }: CardProps) {
   return (
     <motion.div
       whileHover={{ translateY: -6, boxShadow: "0 12px 30px rgba(0,0,0,0.12)" }}

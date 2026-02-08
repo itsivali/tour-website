@@ -1,21 +1,20 @@
-from fastapi import APIRouter
-from app.schemas import Tour
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from app.database import get_db
+from app.models import Tour
+from app.schemas import TourOut
 
 router = APIRouter()
 
-# Sample tours
-sample_tours = [
-    {"id": 1, "title": "Safari Adventure", "description": "Explore Kenya’s wildlife", "price": 500},
-    {"id": 2, "title": "Coastal Escape", "description": "Relax at Diani Beach", "price": 350},
-]
 
-@router.get("/", response_model=list[Tour])
-async def get_tours():
-    return sample_tours
+@router.get("/", response_model=list[TourOut])
+async def get_tours(db: Session = Depends(get_db)):
+    return db.query(Tour).all()
 
-@router.get("/{tour_id}", response_model=Tour)
-async def get_tour(tour_id: int):
-    for tour in sample_tours:
-        if tour["id"] == tour_id:
-            return tour
-    return {"error": "Tour not found"}
+
+@router.get("/{tour_id}", response_model=TourOut)
+async def get_tour(tour_id: int, db: Session = Depends(get_db)):
+    tour = db.query(Tour).filter(Tour.id == tour_id).first()
+    if not tour:
+        raise HTTPException(status_code=404, detail="Tour not found")
+    return tour

@@ -1,22 +1,24 @@
-import { useEffect, useState } from "react";
-import { getTours } from "../api/api";
+import { useTours } from "../api/api";
 import TourCard from "../components/TourCard";
 
-const Tours = () => {
-  const [tours, setTours] = useState([]);
-
-  useEffect(() => {
-    getTours().then(data => setTours(data));
-  }, []);
+export default function Tours() {
+  const { tours, isLoading } = useTours();
 
   return (
-    <div className="p-8">
-      <h1 className="text-4xl font-bold mb-6 text-center">All Tours</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {tours.map(tour => <TourCard key={tour.id} tour={tour} />)}
-      </div>
+    <div className="py-12 px-6 max-w-7xl mx-auto">
+      <h1 className="text-4xl font-bold mb-8 text-center text-gray-900">All Tours</h1>
+
+      {isLoading ? (
+        <p className="text-center text-gray-500">Loading tours...</p>
+      ) : tours.length === 0 ? (
+        <p className="text-center text-gray-500">No tours available yet.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {tours.map((tour) => (
+            <TourCard key={tour.id} tour={tour} />
+          ))}
+        </div>
+      )}
     </div>
   );
-};
-
-export default Tours;
+}

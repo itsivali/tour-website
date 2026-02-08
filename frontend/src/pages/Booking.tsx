@@ -1,20 +1,25 @@
 import BookingForm from "../components/BookingForm";
-import { createBooking } from "../api/api";
-import { toast } from "react-hot-toast";
+import { createBooking, useTours } from "../api/api";
+import type { BookingData } from "../api/api";
+import toast from "react-hot-toast";
 
-const Booking = () => {
-  const handleBooking = (data) => {
+export default function Booking() {
+  const { tours, isLoading } = useTours();
+
+  const handleBooking = (data: BookingData) => {
     createBooking(data)
-      .then(res => alert(res.message))
-      .catch(err => alert("Booking failed"));
+      .then((res) => toast.success(res.message))
+      .catch(() => toast.error("Booking failed. Please try again."));
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6 text-center">Book a Tour</h1>
-      <BookingForm onSubmit={handleBooking} />
+    <div className="py-12 px-6">
+      <h1 className="text-3xl font-bold mb-8 text-center text-gray-900">Book a Tour</h1>
+      {isLoading ? (
+        <p className="text-center text-gray-500">Loading tours...</p>
+      ) : (
+        <BookingForm tours={tours} onSubmit={handleBooking} />
+      )}
     </div>
   );
-};
-
-export default Booking;
+}

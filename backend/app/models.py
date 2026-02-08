@@ -1,34 +1,31 @@
-from sqlalchemy import Column, Integer, String, Float, create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Column, Integer, String, Float, DateTime, func
+from app.database import Base
 
-DATABASE_URL = "sqlite:///./tour_website.db"
-
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
-Base = declarative_base()
 
 class Tour(Base):
     __tablename__ = "tours"
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
-    description = Column(String)
-    price = Column(Float)
+    name = Column(String, nullable=False)
+    description = Column(String, nullable=False)
+    price = Column(Float, nullable=False)
+    image = Column(String, default="")
+
 
 class Booking(Base):
     __tablename__ = "bookings"
     id = Column(Integer, primary_key=True, index=True)
-    tour_id = Column(Integer)
-    name = Column(String)
-    email = Column(String)
-    phone = Column(String)
+    tour_id = Column(Integer, nullable=False)
+    name = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    phone = Column(String, default="")
+    travelers = Column(Integer, default=1)
+    created_at = Column(DateTime, server_default=func.now())
+
 
 class Contact(Base):
     __tablename__ = "contacts"
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
-    email = Column(String)
-    message = Column(String)
-
-# Create tables
-Base.metadata.create_all(bind=engine)
+    name = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    message = Column(String, nullable=False)
+    created_at = Column(DateTime, server_default=func.now())

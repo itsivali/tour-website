@@ -9,15 +9,24 @@ const slides = [
 
 export default function HeroSlider() {
   const [index, setIndex] = useState(0);
-  const timeoutRef = useRef(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     timeoutRef.current = setTimeout(() => setIndex((i) => (i + 1) % slides.length), 5000);
-    return () => clearTimeout(timeoutRef.current);
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, [index]);
 
-  const next = () => { clearTimeout(timeoutRef.current); setIndex((i) => (i + 1) % slides.length); };
-  const prev = () => { clearTimeout(timeoutRef.current); setIndex((i) => (i - 1 + slides.length) % slides.length); };
+  const next = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setIndex((i) => (i + 1) % slides.length);
+  };
+
+  const prev = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setIndex((i) => (i - 1 + slides.length) % slides.length);
+  };
 
   return (
     <div className="relative h-[70vh] md:h-[80vh] overflow-hidden">
@@ -35,9 +44,9 @@ export default function HeroSlider() {
             <div className="container mx-auto px-6 text-white">
               <h2 className="text-4xl md:text-6xl font-bold">{slides[index].title}</h2>
               <p className="mt-3 text-lg md:text-xl">{slides[index].subtitle}</p>
-              <div className="mt-6">
-                <button onClick={prev} className="mr-3 px-4 py-2 rounded bg-white/10">Prev</button>
-                <button onClick={next} className="px-4 py-2 rounded bg-white">Explore</button>
+              <div className="mt-6 flex gap-3">
+                <button onClick={prev} className="px-4 py-2 rounded bg-white/20 hover:bg-white/30 transition text-white">Prev</button>
+                <button onClick={next} className="px-4 py-2 rounded bg-white hover:bg-gray-100 transition text-gray-900">Next</button>
               </div>
             </div>
           </div>
@@ -46,7 +55,7 @@ export default function HeroSlider() {
 
       <div className="absolute bottom-6 left-6 flex gap-2">
         {slides.map((s, i) => (
-          <button key={s.id} onClick={() => setIndex(i)} className={`w-3 h-3 rounded-full ${i === index ? "bg-white" : "bg-white/40"}`} />
+          <button key={s.id} onClick={() => setIndex(i)} className={`w-3 h-3 rounded-full transition ${i === index ? "bg-white" : "bg-white/40"}`} />
         ))}
       </div>
     </div>
